@@ -2,14 +2,15 @@ import '@mantine/core/styles.css';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { useEffect } from 'react';
 import { useGlobals } from 'storybook/preview-api';
-import { theme } from '../src/theme';
+import { mantineTheme as theme } from '../src/settings/theme/theme';
 
 export const parameters = {
   layout: 'fullscreen',
   options: {
     showPanel: false,
     // @ts-expect-error – storybook throws build error for (a: any, b: any)
-    storySort: (a, b) => a.title.localeCompare(b.title, undefined, { numeric: true }),
+    storySort: (a, b) =>
+      a.title.localeCompare(b.title, undefined, { numeric: true }),
   },
   backgrounds: { disable: true },
 };

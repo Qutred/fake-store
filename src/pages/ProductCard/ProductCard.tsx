@@ -1,5 +1,3 @@
-import productsApi from '@/api/productsApi/productsApi';
-import { useAppStore } from '@/store';
 import {
   Container,
   Anchor,
@@ -24,20 +22,12 @@ import {
 } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import { useMatches, useParams } from 'react-router-dom';
-
-const items = [
-  { title: 'Main', href: '/' },
-  { title: 'Products', href: '/products' },
-].map((item, index) => (
-  <Anchor href={item.href} key={index}>
-    {item.title}
-  </Anchor>
-));
+import { Link, useParams } from 'react-router-dom';
+import productsApi from '@/api/productsApi/productsApi';
+import { useAppStore } from '@/store';
 
 const ProductCard = () => {
   let params = useParams();
-  const matches = useMatches();
   const theme = useMantineTheme();
   const favorites = useAppStore((state) => state.favorites);
   const toggleFavorites = useAppStore((state) => state.toggleFavorites);
@@ -97,9 +87,37 @@ const ProductCard = () => {
     );
   }
 
+  const breadcrumbItems = [
+    { title: 'Home', to: '/' },
+    { title: 'Products', to: '/products' },
+    {
+      title:
+        product.category.charAt(0).toUpperCase() + product.category.slice(1),
+      to: '/products',
+    },
+    { title: product.title },
+  ].map((item, index, array) => {
+    const isLast = index === array.length - 1;
+
+    return isLast || !item.to ? (
+      <Text
+        key={index}
+        size='sm'
+        c='dimmed'
+        style={{ wordBreak: 'break-word' }}
+      >
+        {item.title}
+      </Text>
+    ) : (
+      <Anchor component={Link} to={item.to} key={index} size='sm'>
+        {item.title}
+      </Anchor>
+    );
+  });
+
   return (
     <Container py='xl' mih={'100%'} px='xs'>
-      <Breadcrumbs>{items}</Breadcrumbs>
+      <Breadcrumbs>{breadcrumbItems}</Breadcrumbs>
       <Card shadow='sm' radius='md' withBorder p='xl' mt='xl'>
         <Grid mb='xl'>
           <Grid.Col span={4}>
@@ -142,9 +160,11 @@ const ProductCard = () => {
                   color={theme.colors.red[7]}
                   onClick={() => handleAddToggleFavorites(product.id)}
                 >
-                  {favorites.includes(product.id) ?
+                  {favorites.includes(product.id) ? (
                     <FaHeart color={theme.colors.red[7]} />
-                  : <FaRegHeart color={theme.colors.red[7]} />}
+                  ) : (
+                    <FaRegHeart color={theme.colors.red[7]} />
+                  )}
                 </ActionIcon>
               </Group>
             </Stack>

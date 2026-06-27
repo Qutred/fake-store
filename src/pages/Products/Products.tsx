@@ -18,11 +18,14 @@ import {
   ActionIcon,
   Menu,
   Chip,
+  Anchor,
+  AspectRatio,
 } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { FaFilter, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { LuCircleAlert } from 'react-icons/lu';
+import { Link } from 'react-router-dom';
 
 const Products = () => {
   const theme = useMantineTheme();
@@ -111,6 +114,7 @@ const Products = () => {
             mb='2rem'
             style={{
               display: 'flex',
+              flexWrap: 'wrap',
               alignItems: 'center',
               gap: '0.5rem',
               paddingBottom: '1rem',
@@ -148,22 +152,33 @@ const Products = () => {
               </Group>
             </Chip.Group>
           </Box>
-          <SimpleGrid cols={3}>
+          <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }}>
             {filteredProducts.map((product) => (
               <Card shadow='sm' padding='lg' withBorder key={product.id}>
                 <Card.Section>
-                  <Image src={product.image} height={160} alt={product.title} />
+                  <Anchor component={Link} to={`/products/${product.id}`}>
+                    <AspectRatio ratio={1080 / 720} maw={300} mx='auto'>
+                      <Image
+                        fit='contain'
+                        src={product.image}
+                        alt={product.title}
+                      />
+                    </AspectRatio>
+                  </Anchor>
                 </Card.Section>
 
                 <Group justify='space-between' mt='md' mb='xs'>
-                  <Text
-                    fw={500}
-                    style={{
-                      color: theme.colors.red[5],
-                    }}
-                  >
-                    {product.title}
-                  </Text>
+                  <Anchor component={Link} to={`/products/${product.id}`}>
+                    <Text
+                      fw={500}
+                      style={{
+                        color: theme.colors.red[5],
+                      }}
+                    >
+                      {product.title}
+                    </Text>
+                  </Anchor>
+
                   <Badge>{product.category}</Badge>
                 </Group>
 

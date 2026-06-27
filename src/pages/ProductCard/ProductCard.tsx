@@ -19,12 +19,15 @@ import {
   useMantineTheme,
   Grid,
   Spoiler,
+  LoadingOverlay,
 } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { Link, useParams } from 'react-router-dom';
 import productsApi from '@/api/productsApi/productsApi';
 import { useAppStore } from '@/store';
+import { LuCircleAlert } from 'react-icons/lu';
+import { useMemo } from 'react';
 
 const ProductCard = () => {
   let params = useParams();
@@ -50,127 +53,116 @@ const ProductCard = () => {
     queryFn: async () => await productsApi.getProduct(Number(params.id)),
   });
 
-  if (isProductFetching) {
+  const breadcrumbItems = useMemo(() => {
     return (
-      <Container py='xl' mih={'100%'}>
-        <Center>
-          <Loader size='xl' />
-          <Text mt='sm' size='sm' color='dimmed'>
-            Loading product...
+      product &&
+      [
+        { title: 'Home', to: '/' },
+        { title: 'Products', to: '/products' },
+        {
+          title:
+            product.category.charAt(0).toUpperCase() +
+            product.category.slice(1),
+          to: '/products',
+        },
+        { title: product.title },
+      ].map((item, index, array) => {
+        const isLast = index === array.length - 1;
+
+        return isLast || !item.to ? (
+          <Text
+            key={index}
+            size='sm'
+            c='dimmed'
+            style={{ wordBreak: 'break-word' }}
+          >
+            {item.title}
           </Text>
-        </Center>
-      </Container>
+        ) : (
+          <Anchor component={Link} to={item.to} key={index} size='sm'>
+            {item.title}
+          </Anchor>
+        );
+      })
     );
-  }
-
-  if (isProductError) {
-    return (
-      <Container py='xl' mih={'100%'}>
-        <Center>
-          <Alert title='Error' color='red'>
-            Failed to load product. Please try again later.
-          </Alert>
-        </Center>
-      </Container>
-    );
-  }
-
-  if (!product) {
-    return (
-      <Container py='xl' mih={'100%'}>
-        <Center>
-          <Alert title='Not Found' color='yellow'>
-            Product not found
-          </Alert>
-        </Center>
-      </Container>
-    );
-  }
-
-  const breadcrumbItems = [
-    { title: 'Home', to: '/' },
-    { title: 'Products', to: '/products' },
-    {
-      title:
-        product.category.charAt(0).toUpperCase() + product.category.slice(1),
-      to: '/products',
-    },
-    { title: product.title },
-  ].map((item, index, array) => {
-    const isLast = index === array.length - 1;
-
-    return isLast || !item.to ? (
-      <Text
-        key={index}
-        size='sm'
-        c='dimmed'
-        style={{ wordBreak: 'break-word' }}
-      >
-        {item.title}
-      </Text>
-    ) : (
-      <Anchor component={Link} to={item.to} key={index} size='sm'>
-        {item.title}
-      </Anchor>
-    );
-  });
+  }, [product]);
 
   return (
     <Container py='xl' mih={'100%'} px='xs'>
-      <Breadcrumbs>{breadcrumbItems}</Breadcrumbs>
-      <Card shadow='sm' radius='md' withBorder p='xl' mt='xl'>
-        <Grid mb='xl'>
-          <Grid.Col span={4}>
-            <Image
-              src={product.image}
-              alt={product.title}
-              width={200}
-              height={200}
-              style={{ objectFit: 'contain' }}
-            />
-          </Grid.Col>
-          <Grid.Col span={8}>
-            <Stack gap='xs'>
-              <Flex mb='md'>
-                <Badge variant='light'>{product.category}</Badge>
-              </Flex>
-              <Title size='h3' fw={600}>
-                {product.title}
-              </Title>
+      {isProductError ? (
+        <Alert
+          variant='light'
+          title='Something went wrong'
+          icon={<LuCircleAlert />}
+        ></Alert>
+      ) : isProductFetching ? (
+        <LoadingOverlay
+          visible={isProductFetching}
+          zIndex={1000}
+          overlayProps={{ radius: 'sm', blur: 2 }}
+        />
+      ) : product ? (
+        <>
+          <Breadcrumbs>{breadcrumbItems}</Breadcrumbs>
+          <Card shadow='sm' radius='md' withBorder p='xl' mt='xl'>
+            <Grid mb='xl'>
+              <Grid.Col span={4}>
+                <Image
+                  src={product.image}
+                  alt={product.title}
+                  width={200}
+                  height={200}
+                  style={{ objectFit: 'contain' }}
+                />
+              </Grid.Col>
+              <Grid.Col span={8}>
+                <Stack gap='xs'>
+                  <Flex mb='md'>
+                    <Badge variant='light'>{product.category}</Badge>
+                  </Flex>
+                  <Title size='h3' fw={600}>
+                    {product.title}
+                  </Title>
 
-              <NumberFormatter
-                prefix='$ '
-                value={product.price}
-                style={{
-                  fontSize: '1.5rem',
-                }}
-              />
-              <Spoiler maxHeight={80} showLabel='Show more' hideLabel='Hide'>
-                {product.description}
-              </Spoiler>
-              <Group>
-                <Button onClick={() => handleAddToCart(product.id)}>
-                  Add to cart
-                </Button>
-                <ActionIcon
-                  variant='default'
-                  radius='md'
-                  size={36}
-                  aria-label='Like'
-                  color={theme.colors.red[7]}
-                  onClick={() => handleAddToggleFavorites(product.id)}
-                >
-                  {favorites.includes(product.id) ? (
-                    <FaHeart color={theme.colors.red[7]} />
-                  ) : (
-                    <FaRegHeart color={theme.colors.red[7]} />
-                  )}
-                </ActionIcon>
-              </Group>
-            </Stack>
-          </Grid.Col>
-        </Grid>
-      </Card>
+                  <NumberFormatter
+                    prefix='$ '
+                    value={product.price}
+                    style={{
+                      fontSize: '1.5rem',
+                    }}
+                  />
+                  <Spoiler
+                    maxHeight={80}
+                    showLabel='Show more'
+                    hideLabel='Hide'
+                  >
+                    {product.description}
+                  </Spoiler>
+                  <Group>
+                    <Button onClick={() => handleAddToCart(product.id)}>
+                      Add to cart
+                    </Button>
+                    <ActionIcon
+                      variant='default'
+                      radius='md'
+                      size={36}
+                      aria-label='Like'
+                      color={theme.colors.red[7]}
+                      onClick={() => handleAddToggleFavorites(product.id)}
+                    >
+                      {favorites.includes(product.id) ? (
+                        <FaHeart color={theme.colors.red[7]} />
+                      ) : (
+                        <FaRegHeart color={theme.colors.red[7]} />
+                      )}
+                    </ActionIcon>
+                  </Group>
+                </Stack>
+              </Grid.Col>
+            </Grid>
+          </Card>
+        </>
+      ) : null}
     </Container>
   );
 };

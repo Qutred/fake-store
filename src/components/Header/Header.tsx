@@ -46,7 +46,7 @@ const HeaderComponent = () => {
 
           <Flex align='center' gap='md'>
             <Box style={{ position: 'relative' }}>
-              <ActionIcon component='a' href='/cart' variant='transparent'>
+              <ActionIcon component='a' href='/favorites' variant='transparent'>
                 <FaHeart size={20} color={theme.white} />
               </ActionIcon>
               {favorites.length > 0 && (

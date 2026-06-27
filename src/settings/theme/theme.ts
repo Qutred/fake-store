@@ -48,11 +48,11 @@ export const mantineTheme: MantineThemeOverride = createTheme({
     Container: Container.extend({
       vars: (_, { size, fluid }) => ({
         root: {
-          '--container-size':
-            fluid ? '100%'
-            : size !== undefined && size in CONTAINER_SIZES ?
-              CONTAINER_SIZES[size]
-            : rem(size),
+          '--container-size': fluid
+            ? '100%'
+            : size !== undefined && size in CONTAINER_SIZES
+              ? CONTAINER_SIZES[size]
+              : rem(size),
         },
       }),
     }),

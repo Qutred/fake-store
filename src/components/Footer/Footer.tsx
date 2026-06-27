@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Container,
   Box,
@@ -7,8 +6,9 @@ import {
   ActionIcon,
   Text,
 } from '@mantine/core';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import { FaGithub, FaHeart } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const theme = useMantineTheme();

@@ -1,5 +1,3 @@
-import productsApi from '@/api/productsApi/productsApi';
-import { useAppStore } from '@/store';
 import {
   SimpleGrid,
   Container,
@@ -26,6 +24,8 @@ import { useMemo, useState } from 'react';
 import { FaFilter, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { LuCircleAlert } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
+import productsApi from '@/api/productsApi/productsApi';
+import { useAppStore } from '@/store';
 
 const Products = () => {
   const theme = useMantineTheme();
@@ -61,11 +61,13 @@ const Products = () => {
   };
 
   let filteredProducts =
-    activeCategorie === 'all' ? products : (
-      products.filter((product) => {
-        return product.category.toLowerCase() === activeCategorie.toLowerCase();
-      })
-    );
+    activeCategorie === 'all'
+      ? products
+      : products.filter((product) => {
+          return (
+            product.category.toLowerCase() === activeCategorie.toLowerCase()
+          );
+        });
 
   filteredProducts = filteredProducts.sort((a, b) => {
     if (activePriceFilter === 'cheap') {
@@ -85,13 +87,13 @@ const Products = () => {
 
   return (
     <Container py='xl' mih={'100%'}>
-      {isProductsError ?
+      {isProductsError ? (
         <Alert
           variant='light'
           title='Something went wrong'
           icon={<LuCircleAlert />}
         ></Alert>
-      : isProductsFetching ?
+      ) : isProductsFetching ? (
         <Box
           component={'div'}
           style={{
@@ -103,13 +105,14 @@ const Products = () => {
         >
           <Loader />
         </Box>
-      : filteredProducts.length === 0 ?
+      ) : filteredProducts.length === 0 ? (
         <Alert
           variant='light'
           title='No products found'
           icon={<LuCircleAlert />}
         ></Alert>
-      : <>
+      ) : (
+        <>
           <Box
             mb='2rem'
             style={{
@@ -218,9 +221,11 @@ const Products = () => {
                       color={theme.colors.red[7]}
                       onClick={() => handleAddToggleFavorites(product.id)}
                     >
-                      {favorites.includes(product.id) ?
+                      {favorites.includes(product.id) ? (
                         <FaHeart color={theme.colors.red[7]} />
-                      : <FaRegHeart color={theme.colors.red[7]} />}
+                      ) : (
+                        <FaRegHeart color={theme.colors.red[7]} />
+                      )}
                     </ActionIcon>
                   </Group>
                 </Stack>
@@ -228,7 +233,7 @@ const Products = () => {
             ))}
           </SimpleGrid>
         </>
-      }
+      )}
     </Container>
   );
 };

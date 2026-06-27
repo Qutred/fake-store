@@ -1,4 +1,3 @@
-import { useAppStore } from '@/store';
 import {
   Flex,
   Text,
@@ -10,6 +9,7 @@ import {
 } from '@mantine/core';
 import { FaShoppingCart, FaHeart, FaUser, FaStore } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { useAppStore } from '@/store';
 
 const HeaderComponent = () => {
   const theme = useMantineTheme();

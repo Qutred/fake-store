@@ -1,11 +1,11 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Login from '@/pages/Auth/Login/Login';
 import Main from '@/layouts/Main/Main';
-import Products from '@/pages/Products/Products';
+import Login from '@/pages/Auth/Login/Login';
 import Cart from '@/pages/Cart/Cart';
 import Favorites from '@/pages/Favorites/Favorites';
-import ProductCard from '@/pages/ProductCard/ProductCard';
 import NotFound from '@/pages/NotFound/NotFound';
+import ProductCard from '@/pages/ProductCard/ProductCard';
+import Products from '@/pages/Products/Products';
 
 export const routerPaths = createBrowserRouter([
   {

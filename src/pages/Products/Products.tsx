@@ -18,6 +18,7 @@ import {
   Chip,
   Anchor,
   AspectRatio,
+  LoadingOverlay,
 } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
@@ -94,17 +95,11 @@ const Products = () => {
           icon={<LuCircleAlert />}
         ></Alert>
       ) : isProductsFetching ? (
-        <Box
-          component={'div'}
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-          }}
-        >
-          <Loader />
-        </Box>
+        <LoadingOverlay
+          visible={isProductsFetching}
+          zIndex={1000}
+          overlayProps={{ radius: 'sm', blur: 2 }}
+        />
       ) : filteredProducts.length === 0 ? (
         <Alert
           variant='light'

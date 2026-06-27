@@ -32,6 +32,7 @@ const Products = () => {
   >('cheap');
   const favorites = useAppStore((state) => state.favorites);
   const toggleFavorites = useAppStore((state) => state.toggleFavorites);
+  const addToCart = useAppStore((state) => state.addToCart);
 
   const {
     data: products = [],
@@ -75,6 +76,10 @@ const Products = () => {
     toggleFavorites(id);
   };
 
+  const handleAddToCart = (id: number) => {
+    addToCart(id);
+  };
+
   return (
     <Container py='xl' mih={'100%'}>
       {isProductsError ?
@@ -114,7 +119,7 @@ const Products = () => {
           >
             <Menu shadow='md' width={200}>
               <Menu.Target>
-                <Button>
+                <Button radius='35px'>
                   <Group>
                     <FaFilter />
                     <Text>{activeCategorie}</Text>
@@ -184,7 +189,12 @@ const Products = () => {
                     }}
                   />
                   <Group>
-                    <Button style={{ flex: 1 }}>Buy</Button>
+                    <Button
+                      style={{ flex: 1 }}
+                      onClick={() => handleAddToCart(product.id)}
+                    >
+                      Add to cart
+                    </Button>
                     <ActionIcon
                       variant='default'
                       radius='md'

@@ -1,6 +1,21 @@
 import { StateCreator } from 'zustand';
-import { FavoritesState } from './favoritesSlice';
 
+export type FavoritesState = {
+  favorites: number[];
+  toggleFavorites: (id: number) => void;
+};
+
+export type CartItem = {
+  id: number;
+  quantity: number;
+};
+
+export type CartState = {
+  cartItems: CartItem[];
+  addToCart: (id: number) => void;
+};
+
+export type AppStore = FavoritesState & CartState;
 export type StoreCreator<T> = StateCreator<
   AppStore,
   [
@@ -11,5 +26,3 @@ export type StoreCreator<T> = StateCreator<
   [],
   T
 >;
-
-export type AppStore = FavoritesState;

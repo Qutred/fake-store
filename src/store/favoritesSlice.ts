@@ -1,9 +1,5 @@
 import { StoreCreator } from './types';
-
-export type FavoritesState = {
-  favorites: number[];
-  toggleFavorites: (id: number) => void;
-};
+import { FavoritesState } from './types';
 
 export const createFavoriteSlice: StoreCreator<FavoritesState> = (set) => ({
   favorites: [],

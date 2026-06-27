@@ -14,9 +14,12 @@ import { Link } from 'react-router-dom';
 const HeaderComponent = () => {
   const theme = useMantineTheme();
   const favorites = useAppStore((state) => state.favorites);
-
+  const cartItems = useAppStore((state) => state.cartItems);
+  const totalCartItemsAmount = cartItems.reduce(
+    (acc, item) => acc + item.quantity,
+    0,
+  );
   const isLoggedIn = false;
-  const cartCount = 2;
 
   return (
     <Container
@@ -62,14 +65,14 @@ const HeaderComponent = () => {
               <ActionIcon component='a' href='/cart' variant='transparent'>
                 <FaShoppingCart size={20} color={theme.white} />
               </ActionIcon>
-              {cartCount > 0 && (
+              {totalCartItemsAmount > 0 && (
                 <Badge
                   color='yellow'
                   variant='filled'
                   size='xs'
                   style={{ position: 'absolute', top: -4, right: -8 }}
                 >
-                  {cartCount}
+                  {totalCartItemsAmount}
                 </Badge>
               )}
             </Box>

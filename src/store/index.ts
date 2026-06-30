@@ -4,6 +4,7 @@ import { immer } from 'zustand/middleware/immer';
 import createCartSlice from './cartSlice';
 import { createFavoriteSlice } from './favoritesSlice';
 import { AppStore } from './types';
+import { createAuthteSlice } from './authSlice';
 
 export const useAppStore = create<AppStore>()(
   devtools(
@@ -11,6 +12,7 @@ export const useAppStore = create<AppStore>()(
       immer((...args) => ({
         ...createFavoriteSlice(...args),
         ...createCartSlice(...args),
+        ...createAuthteSlice(...args),
       })),
       {
         name: 'app-storage',

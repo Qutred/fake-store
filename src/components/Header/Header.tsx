@@ -19,7 +19,7 @@ const HeaderComponent = () => {
     (acc, item) => acc + item.quantity,
     0,
   );
-  const isLoggedIn = false;
+  const isAuthenticated = useAppStore((state) => state.isAuthenticated);
 
   return (
     <Container
@@ -80,8 +80,12 @@ const HeaderComponent = () => {
                 </Badge>
               )}
             </Box>
-            {!isLoggedIn && (
-              <ActionIcon component='a' href='/login' variant='transparent'>
+            {!isAuthenticated && (
+              <ActionIcon
+                component={Link}
+                to='/auth/login'
+                variant='transparent'
+              >
                 <FaUser size={20} color={theme.white} />
               </ActionIcon>
             )}

@@ -1,8 +1,15 @@
+import { type } from 'os';
 import { StateCreator } from 'zustand';
 
 export type FavoritesState = {
   favorites: number[];
   toggleFavorites: (id: number) => void;
+};
+
+export type AuthState = {
+  token: string | null;
+  isAuthenticated: boolean;
+  login: (token: string) => void;
 };
 
 export type CartItem = {
@@ -19,7 +26,7 @@ export type CartState = {
   clearCart: () => void;
 };
 
-export type AppStore = FavoritesState & CartState;
+export type AppStore = FavoritesState & CartState & AuthState;
 export type StoreCreator<T> = StateCreator<
   AppStore,
   [

@@ -13,6 +13,10 @@ export type CartItem = {
 export type CartState = {
   cartItems: CartItem[];
   addToCart: (id: number) => void;
+  decrementQuantity: (id: number) => void;
+  incrementQuantity: (id: number) => void;
+  removeFromCart: (id: number) => void;
+  clearCart: () => void;
 };
 
 export type AppStore = FavoritesState & CartState;
